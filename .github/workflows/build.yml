@@ -1,0 +1,58 @@
+name: Build Kivy APK (Stable)
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
+
+    # Android SDK resmi GitHub
+    - uses: android-actions/setup-android@v3
+
+    # Pasang build-tools SECARA PAKSA
+    - name: Install Android components
+      run: |
+        sdkmanager --install \
+          "platform-tools" \
+          "platforms;android-33" \
+          "build-tools;33.0.2"
+
+    - name: Install system libs
+      run: |
+        sudo apt update
+        sudo apt install -y \
+          openjdk-17-jdk \
+          zip unzip \
+          libncurses5
+
+    - name: Install Buildozer
+      run: |
+        pip install --upgrade pip
+        pip install buildozer cython
+
+    - name: Check AIDL
+      run: |
+        which aidl
+        aidl --version
+
+    - name: Build APK
+      run: |
+        buildozer android debug
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: weather-apk
+        path: bin/*.apk
