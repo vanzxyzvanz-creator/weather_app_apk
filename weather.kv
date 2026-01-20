@@ -1,0 +1,263 @@
+#:import dp kivy.metrics.dp
+#:import rgba kivy.utils.get_color_from_hex
+
+ScreenManager:
+    id: screen_manager
+    DashboardScreen:
+    StatsScreen:
+
+<MenuButton@Button>:
+    size_hint: None, None
+    size: dp(90), dp(40)
+    background_color: 0.2,0.6,0.9,1
+    color: 1,1,1,1
+    font_size: "16sp"
+    bold: True
+    border: (0,0,0,0)
+
+<DashboardScreen@Screen>:
+    name: "dashboard"
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(5)
+        spacing: dp(5)
+
+        # Menu & pencarian
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(5)
+
+            MenuButton:
+                id: menu_btn
+                text: "Menu"
+                on_release: app.menu_dropdown.open(self)
+
+            TextInput:
+                id: city_input
+                hint_text: "Cari kota..."
+                multiline: False
+                background_color: 0.1,0.2,0.35,1
+                foreground_color: 1,1,1,1
+                padding: dp(10)
+                font_size: "16sp"
+                hint_text_color: 0.7,0.7,0.7,1
+
+            Button:
+                text: "Cari"
+                size_hint_x: None
+                width: dp(70)
+                background_color: 0.2,0.6,0.9,1
+                color: 1,1,1,1
+                bold: True
+                on_release: app.search_city()
+
+        # Cuaca saat ini
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_y: 0.35
+            padding: dp(10)
+            spacing: dp(10)
+            canvas.before:
+                Color:
+                    rgba: 0.1,0.2,0.3,1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            Label:
+                id: city
+                text: "Jakarta"
+                font_size: "26sp"
+                bold: True
+                color: 1,1,1,1
+                halign: "center"
+
+            Label:
+                id: temp
+                text: "-- °C"
+                font_size: "50sp"
+                bold: True
+                color: 1,1,1,1
+                halign: "center"
+
+            Label:
+                id: desc
+                text: "Memuat cuaca..."
+                font_size: "16sp"
+                color: 0.8,0.8,0.8,1
+                halign: "center"
+
+            Label:
+                id: time_label
+                text: "Jam: --:--:--"
+                font_size: "14sp"
+                color: 0.8,0.8,0.8,1
+                halign: "center"
+
+        # Prediksi hari ini per jam
+        Label:
+            text: "Prediksi Hari Ini (Per Jam)"
+            font_size: "18sp"
+            size_hint_y: None
+            height: dp(30)
+            color: 1,1,1,1
+            halign: "center"
+
+        ScrollView:
+            do_scroll_x: True
+            do_scroll_y: False
+            size_hint_y: 0.2
+
+            BoxLayout:
+                id: hourly_box
+                orientation: "horizontal"
+                spacing: dp(5)
+                size_hint_x: None
+                width: self.minimum_width
+
+        # Prediksi 5 hari
+        Label:
+            text: "Forecast 5 Hari"
+            font_size: "18sp"
+            size_hint_y: None
+            height: dp(30)
+            color: 1,1,1,1
+            halign: "center"
+
+        ScrollView:
+            do_scroll_x: True
+            do_scroll_y: False
+            size_hint_y: 0.2
+
+            BoxLayout:
+                id: forecast_box
+                orientation: "horizontal"
+                spacing: dp(10)
+                size_hint_x: None
+                width: self.minimum_width
+
+
+<StatsScreen@Screen>:
+    name: "stats"
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(10)
+        spacing: dp(10)
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            padding: dp(5)
+            spacing: dp(5)
+
+            MenuButton:
+                text: "Menu"
+                on_release: app.menu_dropdown.open(self)
+
+        ScrollView:
+            do_scroll_y: True
+
+            GridLayout:
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(8)
+                padding: dp(5)
+
+                # Statistik modern
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba: 0.15,0.25,0.35,1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [8]
+                    Label:
+                        id: stat_temp
+                        text: "Suhu Udara: -- °C"
+                        color: 1,1,1,1
+                        font_size: "16sp"
+
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba: 0.15,0.25,0.35,1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [8]
+                    Label:
+                        id: stat_pressure
+                        text: "Tekanan Udara: -- hPa"
+                        color: 1,1,1,1
+                        font_size: "16sp"
+
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba: 0.15,0.25,0.35,1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [8]
+                    Label:
+                        id: stat_humidity
+                        text: "Kelembapan Udara: -- %"
+                        color: 1,1,1,1
+                        font_size: "16sp"
+
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba: 0.15,0.25,0.35,1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [8]
+                    Label:
+                        id: stat_wind
+                        text: "Angin: -- m/s"
+                        color: 1,1,1,1
+                        font_size: "16sp"
+
+                # Tips bencana modern
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(60)
+                    orientation: "vertical"
+                    padding: dp(5)
+                    spacing: dp(3)
+                    canvas.before:
+                        Color:
+                            rgba: 0.2,0.3,0.45,1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [8]
+                    Label:
+                        id: disaster_health
+                        text: "Tips Kesehatan: Tetap di rumah saat hujan deras."
+                        color: 1,1,1,1
+                        font_size: "14sp"
+                    Label:
+                        id: disaster_flood
+                        text: "Tips Banjir: Siapkan perahu darurat."
+                        color: 1,1,1,1
+                        font_size: "14sp"
+                    Label:
+                        id: disaster_wave
+                        text: "Tips Gelombang: Jangan berenang saat laut bergelombang tinggi."
+                        color: 1,1,1,1
+                        font_size: "14sp"
